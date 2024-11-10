@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.cis357finalprojectqbertgame"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -66,4 +66,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("androidx.core:core-ktx:1.9.0") // Replace with the latest version
 }
