@@ -52,9 +52,10 @@ import com.example.cis357finalprojectqbertgame.ui.theme.pixelFontFamily
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController,
-                authViewModel: AuthViewModel = AuthViewModel()) {
-    var username by remember { mutableStateOf("") }
+fun CreateAccountScreen(modifier: Modifier = Modifier, navController: NavHostController,
+                        authViewModel: AuthViewModel = AuthViewModel()) {
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val loginState = authViewModel.loginState.observeAsState(AuthViewModel.LoginState.NotLoggedIn)
 
@@ -74,14 +75,43 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController,
                 fontSize = 60.sp,
                 color = Color.White,
             )
+            Text(
+                text = "CREATE ACCOUNT",
+                fontFamily = pixelFontFamily,
+                fontSize = 36.sp,
+                color = Color.White,
+                modifier = modifier
+                    .padding(top = 100.dp, bottom = 10.dp)
+            )
             Box (
                 modifier = modifier
-                    .padding(top = 130.dp, bottom = 10.dp)
+                    .padding(10.dp)
                     .background(Color.LightGray)
                     .border(3.dp, Color.White) // Adds a blue border of 2dp thickness
             ) {
-                OutlinedTextField(value = username,
-                    onValueChange = { username = it },
+                OutlinedTextField(value = name,
+                    onValueChange = { name = it },
+                    label = { Text(text = "NAME",
+                        fontFamily = pixelFontFamily,
+                        fontSize = 36.sp)},
+                    colors = outlinedTextFieldColors(
+                        focusedTextColor = Color.White,
+                        unfocusedLabelColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedLabelColor = Color.White,
+                        focusedBorderColor = Color.LightGray,
+                        unfocusedBorderColor = Color.LightGray
+                    )
+                )
+            }
+            Box (
+                modifier = modifier
+                    .padding(10.dp)
+                    .background(Color.LightGray)
+                    .border(3.dp, Color.White) // Adds a blue border of 2dp thickness
+            ) {
+                OutlinedTextField(value = email,
+                    onValueChange = { email = it },
                     label = { Text(text = "EMAIL",
                         fontFamily = pixelFontFamily,
                         fontSize = 36.sp)},
@@ -121,58 +151,44 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController,
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                // Sign in button
+                // Create account button
                 TextButton(
                     onClick = {
-                        authViewModel.login(username, password)
-                        // navController.popBackStack() // Return to main screen
+                        authViewModel.signUp(email, password)
                     },
                     modifier = Modifier
                         .padding(6.dp),
                 ) {
-                    Text("SIGN IN",
+                    Text("CREATE ACCOUNT",
                         color = Color.White,
-                        fontSize = 36.sp,
+                        fontSize = 30.sp,
                         fontFamily = pixelFontFamily)
                 }
-                // Check for log in success
+                // Check for sign up success
                 LaunchedEffect(loginState.value) {
                     when (loginState.value) {
                         is AuthViewModel.LoginState.Success -> {
-                            Log.d("print", "Login successful, pop stack")
-                            navController.popBackStack()
+                            Log.d("print", "Signup successful, pop entire stack")
+                            // Pop entire back stack to return all the way to main screen
+                            navController.popBackStack(navController.graph.startDestinationId, inclusive = false)
                         }
                         else -> {
-                            Log.d("print", "Login failed")
+                            Log.d("print", "Sign up failed")
                         }
                     }
                 }
-                /*
-                loginState?.let { result ->
-                    result.onSuccess {
-                        // Avoid over popping stack since this may execute multiple times
-                        // We just want to pop back stack once to return to main screen
-                        val currentRoute = navController.currentBackStackEntry?.destination?.route
-                        if (currentRoute != "main") {
-                            Log.d("print", "Login successful, pop stack")
-                            navController.popBackStack()
-                        }
-                    }
-                    result.onFailure {
-                        Toast.makeText(LocalContext.current, it.message ?: "Error", Toast.LENGTH_SHORT).show()
-                    }
-                } */
-                // Sign up button
+                // Return to sign in screen button
                 TextButton(
                     onClick = {
-                        navController.navigate("create_account")
+                        //navController.navigate("signup")
+                        navController.popBackStack() // Return back to signup page
                     },
                     modifier = Modifier
                         .padding(6.dp),
                 ) {
-                    Text("SIGN UP",
+                    Text("RETURN",
                         color = Color.White,
-                        fontSize = 36.sp,
+                        fontSize = 30.sp,
                         fontFamily = pixelFontFamily)
                 }
             }
@@ -187,8 +203,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController,
  */
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview() {
+fun CreateAccountScreen() {
     CIS357FinalProjectQbertGameTheme {
-        LoginScreen(modifier = Modifier, navController = NavHostController(LocalContext.current))
+        CreateAccountScreen(modifier = Modifier, navController = NavHostController(LocalContext.current))
     }
 }

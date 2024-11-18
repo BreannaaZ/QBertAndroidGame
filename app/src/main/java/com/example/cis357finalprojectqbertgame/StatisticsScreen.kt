@@ -8,18 +8,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.cis357finalprojectqbertgame.ui.theme.CIS357FinalProjectQbertGameTheme
 import com.example.cis357finalprojectqbertgame.ui.theme.pixelFontFamily
 
 @Composable
-fun StatisticsScreen(modifier: Modifier = Modifier) {
+fun StatisticsScreen(modifier: Modifier = Modifier, navController: NavHostController,
+                     authViewModel: AuthViewModel = AuthViewModel()) {
     Box(
         modifier = modifier
             .background(Color(0xFF001F3F))
@@ -85,6 +89,18 @@ fun StatisticsScreen(modifier: Modifier = Modifier) {
                             .padding(12.dp))
                 }
             }
+            TextButton(
+                onClick = {
+                    navController.popBackStack() // Return back to main screen
+                },
+                modifier = Modifier
+                    .padding(16.dp),
+            ) {
+                Text("RETURN",
+                    color = Color.White,
+                    fontSize = 36.sp,
+                    fontFamily = pixelFontFamily)
+            }
         }
     }
 }
@@ -93,6 +109,6 @@ fun StatisticsScreen(modifier: Modifier = Modifier) {
 @Composable
 fun StatisticsScreenPreview() {
     CIS357FinalProjectQbertGameTheme {
-        StatisticsScreen(modifier = Modifier)
+        StatisticsScreen(modifier = Modifier, navController = NavHostController(LocalContext.current))
     }
 }

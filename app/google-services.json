@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "481544169327",
+    "project_id": "cis357final",
+    "storage_bucket": "cis357final.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481544169327:android:54cbd34c0aa61732c52a9a",
+        "android_client_info": {
+          "package_name": "com.example.cis357finalprojectqbertgame"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvWJmj-NmAYFd137f3sgZszIBH7rFx4vo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
