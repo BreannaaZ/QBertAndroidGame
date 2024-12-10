@@ -1,36 +1,28 @@
 package com.example.cis357finalprojectqbertgame
 
 import AppNavigation
+import android.content.ComponentName
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,10 +30,52 @@ import androidx.navigation.NavHostController
 import com.example.cis357finalprojectqbertgame.ui.theme.CIS357FinalProjectQbertGameTheme
 import com.example.cis357finalprojectqbertgame.ui.theme.pixelFontFamily
 import com.google.firebase.FirebaseApp
+import android.content.Intent;
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+
+// import com.unity3d.player.UnityPlayerActivity;
 
 class MainActivity : ComponentActivity() {
+
+    // Declare the ActivityResultLauncher
+    private lateinit var launchOtherAppLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Initialize the ActivityResultLauncher
+        launchOtherAppLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    /*
+                    RESULT_OK -> {
+                        Toast.makeText(this, "Unity game ended successfully!", Toast.LENGTH_LONG)
+                            .show()
+                    }
+
+                    RESULT_CANCELED -> {
+                        Toast.makeText(
+                            this,
+                            "Unity game canceled or back button pressed",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    else -> {
+                        Toast.makeText(
+                            this,
+                            "Unity game returned unknown result",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                     */
+                }
+            }
+
         enableEdgeToEdge()
         FirebaseApp.initializeApp(this)
         val authViewModel: AuthViewModel by viewModels()
@@ -54,15 +88,49 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    fun launchOtherApp() {
+        try {
+            val intent = Intent().apply {
+                component = ComponentName(
+                    "com.BreannaZinky.SpaceHopper",
+                    "com.unity3d.player.UnityPlayerGameActivity"
+                )
+                // These flags help Android keep track of the Unity activity
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
+            launchOtherAppLauncher.launch(intent) // Launch Unity app
+        } catch (e: Exception) {
+            Toast.makeText(this, "Failed to launch Unity app: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+
 }
 
 @Composable
-fun main(name: String, modifier: Modifier = Modifier, navController: NavHostController,
+fun main(modifier: Modifier = Modifier, navController: NavHostController,
          authViewModel: AuthViewModel = AuthViewModel()) {
     // Variables
     // val loginState by authViewModel.loginState.observeAsState(AuthViewModel.LoginState.NotLoggedIn)
     val loginState = authViewModel.loginState.observeAsState(AuthViewModel.LoginState.NotLoggedIn)
 
+    // Observe currentUserId from the ViewModel
+    val currentUserId by authViewModel.uid.observeAsState("PthdWGwIJ8GxuQj83Ipd") // Default to guest ID
+    Log.d("print", "UID: $currentUserId")
+
+    // Intent stuff
+    // val context = LocalContext.current
+    val context = LocalContext.current as? MainActivity
+    // com.BreannaZinky.SpaceHopper/com.unity3d.player.UnityPlayerGameActivity
+
+    // Fetch the user name on screen composition
+    LaunchedEffect(Unit) {
+        authViewModel.fetchUserName() // Fetch the user's name when the screen is opened
+    }
+
+    // Observe the user name LiveData
+    val name by authViewModel.userName.observeAsState("Guest") // Default to "Guest" if no name is fetched
 
     Box (
         modifier = modifier
@@ -99,7 +167,9 @@ fun main(name: String, modifier: Modifier = Modifier, navController: NavHostCont
             ) {
                 // Start button (launch unity game)
                 TextButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        context?.launchOtherApp()
+                    },
                     modifier = modifier
                         .padding(horizontal = 16.dp)
                 ) {
@@ -118,21 +188,27 @@ fun main(name: String, modifier: Modifier = Modifier, navController: NavHostCont
                         when (loginState.value) {
                             is AuthViewModel.LoginState.Success -> {
                                 // Trigger sign out action
-                                authViewModel.logout()  // You should implement this in your ViewModel
+                                authViewModel.logout()
                             }
                             else -> {
-                                // Navigate to login screen if not logged in
-                                navController.navigate("login")
+                                if (currentUserId != "PthdWGwIJ8GxuQj83Ipd") {
+                                    authViewModel.logout()
+                                } else {
+                                    // Navigate to login screen if not logged in
+                                    navController.navigate("login")
+                                }
                             }
                         }
                     },
                     modifier = modifier
                         .padding(horizontal = 16.dp)
                 ) {
-                    Text( text = when (loginState.value) {
-                            is AuthViewModel.LoginState.Success -> "SIGNOUT"
-                            else -> "LOGIN"
-                        },
+                    Text(
+                        if (currentUserId != "PthdWGwIJ8GxuQj83Ipd") {
+                                    "SIGNOUT"
+                                } else {
+                                    "LOGIN"
+                                },
                         color = Color.White,
                         fontSize = 40.sp,
                         fontFamily = pixelFontFamily)
@@ -144,7 +220,7 @@ fun main(name: String, modifier: Modifier = Modifier, navController: NavHostCont
             TextButton(
                 onClick = { navController.navigate("statistics") },
                 modifier = modifier
-                    .padding(vertical = 16.dp)
+                    .padding(vertical = 30.dp)
             ) {
                 Text("STATS",
                     color = Color.White,
@@ -155,10 +231,12 @@ fun main(name: String, modifier: Modifier = Modifier, navController: NavHostCont
     }
 }
 
+
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     CIS357FinalProjectQbertGameTheme {
-        main("Guest", modifier = Modifier, navController = NavHostController(LocalContext.current))
+        main(modifier = Modifier, navController = NavHostController(LocalContext.current))
     }
 }

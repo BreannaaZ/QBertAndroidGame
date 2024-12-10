@@ -154,7 +154,7 @@ fun CreateAccountScreen(modifier: Modifier = Modifier, navController: NavHostCon
                 // Create account button
                 TextButton(
                     onClick = {
-                        authViewModel.signUp(email, password)
+                        authViewModel.signUp(name, email, password)
                     },
                     modifier = Modifier
                         .padding(6.dp),

@@ -176,6 +176,19 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController,
                         fontFamily = pixelFontFamily)
                 }
             }
+            // Cancel sign up button
+            TextButton(
+                onClick = {
+                    navController.popBackStack() // Go back to main
+                },
+                modifier = Modifier
+                    .padding(18.dp),
+            ) {
+                Text("RETURN",
+                    color = Color.White,
+                    fontSize = 36.sp,
+                    fontFamily = pixelFontFamily)
+            }
         }
     }
 }

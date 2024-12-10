@@ -17,7 +17,7 @@ fun AppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel) {
     NavHost(navController = navController, startDestination = "main") {
         // Main starting screen
         composable("main") {
-            main("guest", modifier, navController, authViewModel)
+            main(modifier, navController, authViewModel)
         }
         // Login screen
         composable("login") {

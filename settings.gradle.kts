@@ -21,4 +21,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "CIS357FinalProjectQbertGame"
 include(":app")
- 
+
+// Include the Unity library
+//include(":unityLibrary")
+//project(":unityLibrary").projectDir = File(rootDir, "UnityProject/unityLibrary")
+//include(":unityLibrary")
+//include(":unityLibrary:mobilenotifications.androidlib")
