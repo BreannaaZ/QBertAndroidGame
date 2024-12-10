@@ -5,6 +5,8 @@ An android game app inspired by Q*Bert - This app includes two parts:
 
 To run the full app on your own machine, you need to build both separately. 
 
+Demo Video:
+
 Assets credit:  
 -Game background music: https://kyrasvoice.itch.io/8-bit-space-music  
 -Background image: https://t3.ftcdn.net/jpg/05/46/46/88/360_F_546468872_b9emNBQeVDLbBqicXaFyoBUwutWcHmbl.jpg  
