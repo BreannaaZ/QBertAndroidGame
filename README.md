@@ -1,10 +1,11 @@
 An android game app inspired by Q*Bert - This app includes two parts:
 
-A Kotlin Android Studio Jetpack Compose app part for the main screen, login and create account page and functionality, and statistics/leaderboard screen and viewing. This part also includes the start button to launch the Unity game using intents.
-The actual Unity app/game that you can play.
-To run the full app on your own machine, you need to build both separately. The android studio app part will build right away and be runnable, where you can login and view the leaderboard, etc., but you cannot launch the unity game part unless you build the unity part separately, which is a little trickier.
+* A Kotlin Android Studio Jetpack Compose app part for the main screen, login and create account page and functionality, and statistics/leaderboard screen and viewing. This part also includes the start button to launch the Unity game using intents.  
+* The actual Unity app/game that you can play.  
 
-Demo Video:
+To run the full app on your own machine, you need to build both separately. The android studio app part will build right away and be runnable, where you can login and view the leaderboard, etc., but you cannot launch the unity game part unless you build the unity part separately.
+
+Demo Video: https://youtu.be/3K3GtdHFqYo 
 
 Assets credit:  
 -Game background music: https://kyrasvoice.itch.io/8-bit-space-music  
