@@ -7,6 +7,8 @@ To run the full app on your own machine, you need to build both separately. The 
 
 Demo Video: https://youtu.be/3K3GtdHFqYo 
 
+View the Wiki for a full tutorial and further details on the development of this application.
+
 Assets credit:  
 -Game background music: https://kyrasvoice.itch.io/8-bit-space-music  
 -Background image: https://t3.ftcdn.net/jpg/05/46/46/88/360_F_546468872_b9emNBQeVDLbBqicXaFyoBUwutWcHmbl.jpg  
